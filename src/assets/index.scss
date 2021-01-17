@@ -1,0 +1,37 @@
+@import 'variables';
+@import 'mixins';
+
+:root {
+  font-size: 12px;
+  font-family: $ff-s;
+
+  @include tablet {
+    font-size: 13px;
+  }
+
+  @include desktop {
+    font-size: 14px;
+  }
+}
+
+// Resets
+*,
+*::after,
+*::before {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+*:focus {
+  outline: none;
+}
+
+button {
+  all: unset;
+  cursor: pointer;
+}
+
+body {
+  background: #f5f5f5;
+}
