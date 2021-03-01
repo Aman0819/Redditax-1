@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import '../assets/search.css';
-// Import Material Icons
-import { Search as SearchIcon } from '@material-ui/icons';
+import { Search as SearchIcon } from 'react-feather';
 
 function Search(props) {
   const [searchtext, setSearchText] = useState('');

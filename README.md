@@ -1,3 +1,5 @@
-# Redditax
+# REDDITAX
 
-### Reddit Image Gallery, built using ReactJS, Context API, SCSS, and powered by Reddit API.
+## Reddit Image Gallery.
+
+Built using ReactJS, Context API, SCSS, and powered by Reddit API.

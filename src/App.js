@@ -1,5 +1,7 @@
 import React from 'react'; // { useCallback, useEffect, useState, useRef }
 import { Router } from 'react-router-dom';
+import { ThemeProvider } from 'styled-components';
+import theme from 'src/theme';
 
 // Utilities
 // import axios from 'axios';
@@ -13,12 +15,6 @@ import TitleComponent from './components/Title/';
 // import Search from './views/Search';
 // import CardGrid from './views/Home';
 // import ImageGrid from './views/ImageGrid';
-
-// Material Components
-import { ThemeProvider } from '@material-ui/core';
-
-// Material theme
-import theme from './theme';
 
 // Routes
 import routes, { renderRoutes } from './routes';

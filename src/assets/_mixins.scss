@@ -7,14 +7,9 @@
   }
 }
 
-;
-
-
 // For desktop
 @mixin desktop {
   @media (min-width: #{$desktop}) {
     @content
   }
 }
-
-;

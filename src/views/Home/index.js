@@ -1,17 +1,8 @@
 import React from 'react';
-
-// Custom Components
-import Header from './Header';
 import SubredditCard from './SubredditCard';
 
-// Static Data
 import subreddits from '../../static/subreddits';
-
-// Material Components
-import { Box } from '@material-ui/core';
-
-// Modular Scss
-import classes from './subredditCard.module.scss';
+import StyledCardContainer, { Header as StyledHeader } from './styles';
 
 // React Component
 const CardGrid = ({ className, ...rest }) => {
@@ -116,9 +107,9 @@ const CardGrid = ({ className, ...rest }) => {
 
   // Render React
   return (
-    <Box className={className}>
-      <Header title="Browse Some From Here" />
-      <div className={classes['card-container']}>
+    <section className={className}>
+      <StyledHeader>Browse Some From Here</StyledHeader>
+      <StyledCardContainer>
         {subreddits.map((subreddit) => (
           <SubredditCard
             name={subreddit.name}
@@ -130,8 +121,8 @@ const CardGrid = ({ className, ...rest }) => {
             key={subreddit.rank}
           />
         ))}
-      </div>
-    </Box>
+      </StyledCardContainer>
+    </section>
   );
 };
 

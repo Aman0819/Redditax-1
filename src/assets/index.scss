@@ -1,9 +1,8 @@
-@import 'variables';
 @import 'mixins';
 
 :root {
   font-size: 12px;
-  font-family: $ff-s;
+  font-family: 'Nunito';
 
   @include tablet {
     font-size: 13px;

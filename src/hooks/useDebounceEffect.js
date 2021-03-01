@@ -1,6 +1,6 @@
 import { useEffect, useCallback } from 'react';
 
-function useDebounce(effect, deps, delay = 250) {
+function useDebounceEffect(effect, deps, delay = 250) {
   const callback = useCallback(effect, deps);
 
   useEffect(() => {
@@ -10,4 +10,4 @@ function useDebounce(effect, deps, delay = 250) {
   return callback;
 }
 
-export default useDebounce;
+export default useDebounceEffect;

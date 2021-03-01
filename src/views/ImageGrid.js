@@ -1,12 +1,5 @@
 import React from 'react';
-// Import Material Components
-import { Box, IconButton, Tooltip } from '@material-ui/core';
-// Import Material Icons
-import {
-  ArrowForwardIos as ArrowForwardIosIcon,
-  ArrowBackIos as ArrowBackIosIcon
-} from '@material-ui/icons';
-// Import Custom Components
+
 import ImagePost from './ImagePost.js';
 
 const ImageGrid = ({ files, getPrevPage, getNextPage }) => {
@@ -17,7 +10,7 @@ const ImageGrid = ({ files, getPrevPage, getNextPage }) => {
           <ImagePost key={file.data.id} file={file} />
         ))}
       </div>
-      <Box display="flex" justifyContent="space-between">
+      {/* <Box display="flex" justifyContent="space-between">
         <Tooltip title="Previous Page" aria-labelledby="previous_page">
           <IconButton onClick={getPrevPage}>
             <ArrowBackIosIcon fontSize="large" />
@@ -28,7 +21,7 @@ const ImageGrid = ({ files, getPrevPage, getNextPage }) => {
             <ArrowForwardIosIcon fontSize="large" />
           </IconButton>
         </Tooltip>
-      </Box>
+      </Box> */}
     </div>
   );
 };

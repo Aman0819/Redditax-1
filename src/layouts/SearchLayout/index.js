@@ -1,43 +1,41 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
+import useDebounceEffect from 'src/hooks/useDebounceEffect';
+import { Search as SearchIcon } from 'react-feather';
+import Logo from 'src/components/Logo';
+import StyledHeader from './styles';
 
-// Modular Scss
-import classes from './search.module.scss';
-
-// Material Components
-import { Box } from '@material-ui/core';
-
-// Import Material Icons
-import { Search as SearchIcon } from '@material-ui/icons';
-
-const Search = ({ children, className, ...rest }) => {
+const Search = ({ children, className, ...props }) => {
   const [searchtext, setSearchText] = useState('');
+  const [debounceDep, setDebounceDep] = useState(true);
 
-  function onSearchSubmit(event) {
-    event.preventDefault();
-    // onSubmit(searchtext);
-  }
+  const onSearch = () => {
+    // setDebounceDep((prev) => !prev);
+    console.log('searcchchch');
+  };
 
-  console.log(searchtext);
+  useDebounceEffect(onSearch, [debounceDep], 300);
 
   // Render react
   return (
-    <Box className={className}>
-      <div className={classes['search-container']}>
-        <form onSubmit={onSearchSubmit} className={classes['search-box']}>
+    <StyledHeader className={clsx(className)} {...props}>
+      <div className="search-container">
+        <Logo />
+        <div className="search-box">
           <span>r/</span>
           <input
             type="text"
-            className={classes['search-input']}
             value={searchtext}
+            className="search-input"
             onChange={(e) => setSearchText(e.target.value)}
           />
-          <button type="submit" className={classes['submit-btn']}>
-            <SearchIcon fontSize="large" />
+          <button onClick={onSearch} className="submit-btn">
+            <SearchIcon />
           </button>
-        </form>
+        </div>
       </div>
       {children}
-    </Box>
+    </StyledHeader>
   );
 };
 
