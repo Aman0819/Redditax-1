@@ -1,6 +1,11 @@
 import React from 'react'; // { useCallback, useEffect, useState, useRef }
 import { Router } from 'react-router-dom';
+
+// Providers
 import { ThemeProvider } from 'styled-components';
+import SearchProvider from 'src/contexts/SearchContext';
+
+// Theme
 import theme from 'src/theme';
 
 // Utilities
@@ -19,10 +24,6 @@ import TitleComponent from './components/Title/';
 // Routes
 import routes, { renderRoutes } from './routes';
 
-// Proxies for API
-// const URL = 'https://www.reddit.com/r/';
-// const CORS_PROXY = 'https://cors-anywhere.herokuapp.com/';
-
 // React Component
 function App() {
   const history = createBrowserHistory();
@@ -30,8 +31,9 @@ function App() {
   // Render React
   return (
     <ThemeProvider theme={theme}>
-      <Router history={history}>
-        {/* <div className="App">
+      <SearchProvider>
+        <Router history={history}>
+          {/* <div className="App">
         <Search onSubmit={searchSubreddit} />
         <h1 onClick={resetSubreddit} id="logo">
         <span aria-hidden="true">Redditax</span> <span>Reddit</span>ax
@@ -47,9 +49,10 @@ function App() {
             />
             )}
           </div> */}
-        <TitleComponent title="Redditax" />
-        {renderRoutes(routes)}
-      </Router>
+          <TitleComponent title="Redditax" />
+          {renderRoutes(routes)}
+        </Router>
+      </SearchProvider>
     </ThemeProvider>
   );
 }

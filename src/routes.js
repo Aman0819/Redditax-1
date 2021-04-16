@@ -28,8 +28,8 @@ export const renderRoutes = (routes = []) => (
 const routes = [
   {
     exact: true,
-    path: '/subreddit/:srName',
-    component: lazy(() => import('./views/SubReddit'))
+    path: '/subreddits/:srName',
+    component: lazy(() => import('./views/SubReddits'))
   },
   {
     exact: true,

@@ -5,125 +5,23 @@ import subreddits from '../../static/subreddits';
 import StyledCardContainer, { Header as StyledHeader } from './styles';
 
 // React Component
-const CardGrid = ({ className, ...rest }) => {
-  // // const [reddit, setReddit] = useState({
-  // //   currentSubreddit: '',
-  // //   files: [],
-  // //   after: null,
-  // //   before: null,
-  // //   currentPage: 1
-  // // });
+const Home = ({ className, ...rest }) => (
+  <section className={className}>
+    <StyledHeader>Browse Some From Here</StyledHeader>
+    <StyledCardContainer>
+      {subreddits.map((subreddit) => (
+        <SubredditCard
+          name={subreddit.name}
+          url={subreddit.url}
+          alt={subreddit.alt}
+          subcount={subreddit.subcount}
+          description={subreddit.description}
+          rank={subreddit.rank}
+          key={subreddit.rank}
+        />
+      ))}
+    </StyledCardContainer>
+  </section>
+);
 
-  // const searchSubreddit = useCallback(
-  //   async (subreddit) => {
-  //     try {
-  //       await setRetry(false);
-  //       const response = await axios.get(
-  //         `${CORS_PROXY}${URL}${subreddit}.json?raw_json=1`
-  //       );
-
-  //       if (isMountedRef.current) {
-  //         setCurrentSubreddit(subreddit);
-  //         setFiles(response.data.data.children);
-  //       }
-  //       // setReddit({
-  //       //   ...reddit,
-  //       //   currentSubreddit: subreddit,
-  //       //   files: response.data.data.children
-  //       // });
-  //     } catch (err) {
-  //       setRetry(true);
-  //       console.error(err);
-  //     }
-  //   },
-  //   [isMountedRef]
-  // );
-
-  // useEffect(() => {
-  //   files.forEach((element) => {
-  //     if (element.data.preview) {
-  //       console.log(element.data.preview.images[0].source.URL);
-  //     }
-  //   });
-  // }, [files]);
-
-  // // Test
-  // useEffect(() => console.log('retry changed! yay'), [retry]);
-
-  // const getNextPage = useCallback(async () => {
-  //   const response = await axios.get(
-  //     `${URL}${currentSubreddit}.json?count=${
-  //       currentPage * itemsPerPage
-  //     }&after=${after}&raw_json=1`
-  //   );
-
-  //   if (isMountedRef.current) {
-  //     setFiles(response.data.data.children);
-  //     after.current = response.data.data.after;
-  //     before.current = response.data.data.before;
-  //     setCurrentPage((prev) => prev + 1);
-  //   }
-  //   // setReddit({
-  //   //   ...reddit,
-  //   //   files: response.data.data.children,
-  //   //   after: response.data.data.after,
-  //   //   before: response.data.data.before,
-  //   //   currentPage: reddit.currentPage + 1
-  //   // });
-  //   window.scrollTo({
-  //     top: 0,
-  //     left: 0,
-  //     behavior: 'smooth'
-  //   });
-  // }, [isMountedRef, currentPage, currentSubreddit]);
-
-  // const getPrevPage = useCallback(async () => {
-  //   const response = await axios.get(
-  //     `${URL}${currentSubreddit}.json?count=${
-  //       (currentPage - 1) * 25 - 1
-  //     }&before=${before}&raw_json=1`
-  //   );
-
-  //   if (isMountedRef.current) {
-  //     setFiles(response.data.data.children);
-  //     after.current = response.data.data.after;
-  //     before.current = response.data.data.before;
-  //     if (currentPage > 1) {
-  //       setCurrentPage((prev) => prev - 1);
-  //     }
-  //   }
-  //   // setReddit({
-  //   //   ...reddit,
-  //   //   files: response.data.data.children,
-  //   //   after: response.data.data.after,
-  //   //   before: response.data.data.before
-  //   // });
-  //   window.scrollTo(0, 0);
-  // }, [isMountedRef, currentPage, currentSubreddit]);
-
-  // const resetSubreddit = () => {
-  //   setCurrentSubreddit('');
-  // };
-
-  // Render React
-  return (
-    <section className={className}>
-      <StyledHeader>Browse Some From Here</StyledHeader>
-      <StyledCardContainer>
-        {subreddits.map((subreddit) => (
-          <SubredditCard
-            name={subreddit.name}
-            url={subreddit.url}
-            alt={subreddit.alt}
-            subcount={subreddit.subcount}
-            description={subreddit.description}
-            rank={subreddit.rank}
-            key={subreddit.rank}
-          />
-        ))}
-      </StyledCardContainer>
-    </section>
-  );
-};
-
-export default CardGrid;
+export default Home;

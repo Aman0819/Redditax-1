@@ -26,5 +26,6 @@ export default {
   card2: '1349px',
   card3: '1810px',
   trasition1: 'cubic-bezier(.21, 1.00, 0.81, 1.00)',
-  br: '1em'
+  br: '1em',
+  containerSize: '1400px'
 };

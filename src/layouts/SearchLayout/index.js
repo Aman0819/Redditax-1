@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React from 'react';
+
+// Utilities
 import clsx from 'clsx';
-import useDebounceEffect from 'src/hooks/useDebounceEffect';
-import { Search as SearchIcon } from 'react-feather';
+
+// Material Icons
+import { Search as SearchIcon } from '@material-ui/icons';
+
+// Custom Components
 import Logo from 'src/components/Logo';
+
+// Styled Components
 import StyledHeader from './styles';
 
-const Search = ({ children, className, ...props }) => {
-  const [searchtext, setSearchText] = useState('');
-  const [debounceDep, setDebounceDep] = useState(true);
+// Context
+import { useSearch } from 'src/contexts/SearchContext';
 
-  const onSearch = () => {
-    // setDebounceDep((prev) => !prev);
-    console.log('searcchchch');
+// Actions
+import actions from 'src/actions/searchActions';
+import { useHistory } from 'react-router';
+
+const Search = ({ children, className, ...props }) => {
+  const [state, dispatch] = useSearch();
+  const history = useHistory();
+
+  const handleRedirect = () => {
+    history.push('subreddits/' + state.currentSubreddit);
   };
 
-  useDebounceEffect(onSearch, [debounceDep], 300);
-
-  // Render react
+  // Render JSX
   return (
     <StyledHeader className={clsx(className)} {...props}>
       <div className="search-container">
@@ -25,11 +36,16 @@ const Search = ({ children, className, ...props }) => {
           <span>r/</span>
           <input
             type="text"
-            value={searchtext}
+            value={state.currentSubreddit}
             className="search-input"
-            onChange={(e) => setSearchText(e.target.value)}
+            onChange={(e) =>
+              dispatch({
+                type: actions.SET_CURRENT_SUBREDDIT,
+                payload: e.target.value
+              })
+            }
           />
-          <button onClick={onSearch} className="submit-btn">
+          <button onClick={handleRedirect} className="submit-btn">
             <SearchIcon />
           </button>
         </div>
