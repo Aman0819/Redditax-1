@@ -1,17 +1,19 @@
+import { lighten, darken } from 'polished';
+
 export default {
   palette: {
     primary: '#202C39',
-    primaryLight: 'lighten(#202C39, 20%)',
-    primaryDark: 'darken(#202C39, 20%)',
+    primaryLight: lighten(0.2, '#202C39'),
+    primaryDark: darken(0.2, '#202C39'),
     secondary: '#283845',
-    secondaryLight: 'lighten(#283845, 20%)',
-    secondaryDark: '#22303b',
+    secondaryLight: lighten(0.2, '#283845'),
+    secondaryDark: darken(0.2, '#283845'),
     ternary: '#8BE8CB',
-    ternaryLight: 'lighten(#8BE8CB, 20%)',
-    ternaryDark: 'darken(#8BE8CB, 20%)',
+    ternaryLight: lighten(0.2, '#8BE8CB'),
+    ternaryDark: darken(0.2, '#8BE8CB'),
     fourth: '#B75D69',
-    fourthLight: 'lighten(#B75D69, 20%)',
-    fourthDark: 'darken(#B75D69, 20%)',
+    fourthLight: lighten(0.2, '#B75D69'),
+    fourthDark: darken(0.2, '#B75D69'),
     reddit: '#FF5700'
   },
   fonts: {

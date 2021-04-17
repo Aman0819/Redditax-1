@@ -6,7 +6,8 @@ export default styled.header`
     width: 100%;
     min-height: 40vh;
     background: linear-gradient(to top, rgba(32, 32, 32, 0.9), transparent),
-      url('http://unsplash.it/1024/720?random') no-repeat center center;
+      url('https://images.pexels.com/photos/1629236/pexels-photo-1629236.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260')
+        no-repeat center center;
     background-size: cover;
     background-position: center;
     display: flex;

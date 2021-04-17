@@ -1,5 +1,6 @@
 import React from 'react';
 import clsx from 'clsx';
+import { useHistory } from 'react-router';
 
 const SubredditCard = ({
   rank,
@@ -11,9 +12,14 @@ const SubredditCard = ({
   className,
   ...rest
 }) => {
-  // Render react
+  const history = useHistory();
+
+  // Render JSX
   return (
-    <div className={clsx(className, 'card')}>
+    <div
+      className={clsx(className, 'card')}
+      onClick={() => history.push('/subreddits/' + name)}
+    >
       <div className="rank">{rank}</div>
 
       <div className="front">

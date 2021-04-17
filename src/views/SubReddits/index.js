@@ -5,7 +5,14 @@ import { useParams } from 'react-router';
 import axios from 'axios';
 
 // Actions
-import actions from 'src/actions/searchActions.js';
+import {
+  setAfter,
+  setBefore,
+  setCurrentPage,
+  setCurrentSubreddit,
+  setFiles,
+  setRetry
+} from 'src/actions/searchActions.js';
 
 // Context
 import { useSearch } from 'src/contexts/SearchContext.js';
@@ -17,7 +24,7 @@ import useIsMountedRef from 'src/hooks/useIsMountedRef.js';
 import SubReddit from './SubReddit.js';
 
 // Material Components
-import { IconButton, Tooltip } from '@material-ui/core';
+import { IconButton, Tooltip, Typography } from '@material-ui/core';
 
 // Material Icons
 import {
@@ -28,9 +35,12 @@ import {
 // Styled-components
 import {
   StyledImageGrid,
-  StyledContainer,
-  StyledPaginationContainer
+  StyledPaginationContainer,
+  StyledHeader,
+  StyledLinearProgress,
+  PreviousSearchesContainer
 } from './styles.js';
+import { Link } from 'react-router-dom';
 
 // Proxies for API
 const URL = 'https://www.reddit.com/r/';
@@ -44,28 +54,19 @@ const SubReddits = () => {
   const searchSubreddit = useCallback(
     async (srName) => {
       try {
-        dispatch({ type: actions.SET_RETRY, payload: false });
+        setRetry(false);
         const response = await axios.get(`${URL}${srName}.json?raw_json=1`);
 
         if (isMountedRef.current) {
           const previewableFiles = response?.data?.data?.children.filter(
             (file) => file?.data?.preview?.enabled
           );
-          dispatch({
-            type: actions.SET_CURRENT_FILES,
-            payload: previewableFiles
-          });
-          dispatch({
-            type: actions.SET_AFTER,
-            payload: response?.data?.data?.after
-          });
-          dispatch({
-            type: actions.SET_BEFORE,
-            payload: response?.data?.data?.before
-          });
+          dispatch(setFiles(previewableFiles));
+          dispatch(setAfter(response?.data?.data?.after));
+          dispatch(setBefore(response?.data?.data?.before));
         }
       } catch (err) {
-        dispatch({ type: actions.SET_RETRY, payload: false });
+        dispatch(setRetry(true));
         console.error(err);
       }
     },
@@ -81,22 +82,13 @@ const SubReddits = () => {
       );
 
       if (isMountedRef.current) {
-        dispatch({
-          type: actions.SET_CURRENT_FILES,
-          payload: response?.data?.data?.children
-        });
-        dispatch({
-          type: actions.SET_AFTER,
-          payload: response?.data?.data?.after
-        });
-        dispatch({
-          type: actions.SET_BEFORE,
-          payload: response?.data?.data?.before
-        });
-        dispatch({
-          type: actions.SET_CURRENT_PAGE,
-          payload: state.currentPage + 1
-        });
+        const previewableFiles = response?.data?.data?.children.filter(
+          (file) => file?.data?.preview
+        );
+        dispatch(setFiles(previewableFiles));
+        dispatch(setAfter(response?.data?.data?.after));
+        dispatch(setBefore(response?.data?.data?.before));
+        dispatch(setCurrentPage(state.currentPage + 1));
       }
 
       window.scrollTo({
@@ -117,23 +109,15 @@ const SubReddits = () => {
       );
 
       if (isMountedRef.current) {
-        dispatch({
-          type: actions.SET_CURRENT_FILES,
-          payload: response?.data?.data?.children
-        });
-        dispatch({
-          type: actions.SET_AFTER,
-          payload: response?.data?.data?.after
-        });
-        dispatch({
-          type: actions.SET_BEFORE,
-          payload: response?.data?.data?.before
-        });
+        const previewableFiles = response?.data?.data?.children.filter(
+          (file) => file?.data?.preview?.enabled
+        );
+        dispatch(setFiles(previewableFiles));
+        dispatch(setAfter(response?.data?.data?.after));
+        dispatch(setBefore(response?.data?.data?.before));
+
         if (state.currentPage > 1) {
-          dispatch({
-            type: actions.SET_CURRENT_PAGE,
-            payload: state.currentPage - 1
-          });
+          dispatch(setCurrentPage(state.currentPage - 1));
         }
       }
       window.scrollTo({
@@ -146,46 +130,96 @@ const SubReddits = () => {
   );
 
   useEffect(() => {
+    dispatch(setCurrentSubreddit(''));
     if (!srName) return;
     searchSubreddit(srName);
-  }, [srName, searchSubreddit]);
+  }, [srName, searchSubreddit, dispatch]);
 
-  if (!state?.files)
+  const renderPreviousSearches = () => {
+    const previousSearches = localStorage.getItem('previousSearches');
+    if (!previousSearches?.length) return;
     return (
-      <StyledContainer>
-        <h3>Nothing to show here!</h3>
-      </StyledContainer>
+      <PreviousSearchesContainer>
+        Your Previous Searches:
+        {JSON.parse(previousSearches).map((prev) => (
+          <Link to={'/subreddits/' + prev} className="search-term">
+            {prev}
+          </Link>
+        ))}
+      </PreviousSearchesContainer>
+    );
+  };
+
+  const renderImageGrid = () =>
+    !state?.files?.length ? (
+      <StyledLinearProgress />
+    ) : (
+      <React.Fragment>
+        <StyledHeader>
+          <h3>Posts from r/{srName.toLowerCase()}</h3>
+          {!!localStorage?.previousSearches?.length && renderPreviousSearches()}
+          <StyledPaginationContainer
+            display="flex"
+            justifyContent="space-between"
+          >
+            <Tooltip title="Previous Page" aria-labelledby="prev-page">
+              <span>
+                <IconButton
+                  onClick={() => getPrevPage(srName)}
+                  disabled={!state.before}
+                >
+                  <PrevPageIcon size="large" />
+                </IconButton>
+              </span>
+            </Tooltip>
+            <Typography variant="h5">Page {state.currentPage}</Typography>
+            <Tooltip title="Next Page" aria-labelledby="next-page">
+              <span>
+                <IconButton
+                  onClick={() => getNextPage(srName)}
+                  disabled={!state.after}
+                >
+                  <NextPageIcon size="large" />
+                </IconButton>
+              </span>
+            </Tooltip>
+          </StyledPaginationContainer>
+        </StyledHeader>
+        <StyledImageGrid className="image-grid">
+          {state.files.map((file) => (
+            <SubReddit key={file.data.id} file={file} />
+          ))}
+        </StyledImageGrid>
+        <StyledPaginationContainer
+          display="flex"
+          justifyContent="space-between"
+        >
+          <Tooltip title="Previous Page" aria-labelledby="prev-page">
+            <span>
+              <IconButton
+                onClick={() => getPrevPage(srName)}
+                disabled={!state.before}
+              >
+                <PrevPageIcon size="large" />
+              </IconButton>
+            </span>
+          </Tooltip>
+          <Typography variant="h5">Page {state.currentPage}</Typography>
+          <Tooltip title="Next Page" aria-labelledby="next-page">
+            <span>
+              <IconButton
+                onClick={() => getNextPage(srName)}
+                disabled={!state.after}
+              >
+                <NextPageIcon size="large" />
+              </IconButton>
+            </span>
+          </Tooltip>
+        </StyledPaginationContainer>
+      </React.Fragment>
     );
 
-  return (
-    <div className="image-grid__container">
-      <StyledImageGrid className="image-grid">
-        {state.files.map((file) => (
-          <SubReddit key={file.data.id} file={file} />
-        ))}
-      </StyledImageGrid>
-      <StyledPaginationContainer display="flex" justifyContent="space-between">
-        <Tooltip title="Previous Page" aria-labelledby="prev-page">
-          <IconButton
-            onClick={() => getPrevPage(srName)}
-            disabled={!state.before}
-          >
-            <PrevPageIcon size="large" />
-          </IconButton>
-        </Tooltip>
-        <Tooltip title="Next Page" aria-labelledby="next-page">
-          <IconButton
-            onClick={() => getNextPage(srName)}
-            disabled={!state.after}
-          >
-            <span>
-              <NextPageIcon size="large" />
-            </span>
-          </IconButton>
-        </Tooltip>
-      </StyledPaginationContainer>
-    </div>
-  );
+  return <div className="image-grid__container">{renderImageGrid()}</div>;
 };
 
 export default SubReddits;

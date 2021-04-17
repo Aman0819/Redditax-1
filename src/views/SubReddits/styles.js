@@ -1,11 +1,100 @@
+import { LinearProgress } from '@material-ui/core';
 import styled from 'styled-components';
 // import { rgba } from 'polished';
+
+export const StyledHeader = styled.header`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  margin: 2em auto;
+
+  h3 {
+    font-size: 2.75rem;
+    color: ${({ theme }) => theme.palette.secondaryDark};
+    position: relative;
+    margin-bottom: 0.35em;
+    animation: fade-in 1s forwards ease-in;
+    z-index: 1;
+
+    &::after {
+      --translateX: -50%;
+      content: '';
+      position: absolute;
+      bottom: -0.15em;
+      left: 50%;
+      width: 90%;
+      height: 0.075em;
+      border-radius: 1em;
+      background-color: ${({ theme }) => theme.palette.secondaryLight};
+      transform: translateX(-50%);
+      animation: fade-in 2s forwards ease-out;
+    }
+
+    &::before {
+      --translateX: -50%;
+      content: '';
+      position: absolute;
+      bottom: -0.125em;
+      left: 50%;
+      width: 90%;
+      height: 0.075em;
+      border-radius: 1em;
+      background-color: ${({ theme }) => theme.palette.secondaryLight};
+      transform: translateX(-50%);
+      animation: fade-in 1.5s forwards ease-out;
+    }
+  }
+
+  @keyframes fade-in {
+    from {
+      opacity: 0;
+      transform: translateY(-1em) translateX(var(--translateX, 0));
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0) translateX(var(--translateX, 0));
+    }
+  }
+`;
+
+export const StyledLinearProgress = styled(LinearProgress)`
+  margin: 4em auto;
+  max-width: 600px;
+  width: 80%;
+`;
+
+export const StyledCircularProgressContainer = styled.div`
+  margin: 2em auto;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const PreviousSearchesContainer = styled.div`
+  display: flex;
+  margin: 2em 0.5em;
+
+  .search-term {
+    color: ${({ theme }) => theme.palette.secondaryLight};
+    font-size: 1.1rem;
+    margin-left: 0.75em;
+
+    :hover {
+      color: ${({ theme }) => theme.palette.secondaryDark};
+    }
+  }
+`;
 
 export const StyledImageGrid = styled.div`
   max-width: ${({ theme }) => theme.containerSize};
   width: 90%;
   margin: 3em auto;
   columns: 4 300px;
+  column-gap: 2em;
 
   /* 3 column Masonry for when screen fits 3 cards on the Home Page */
   @media (max-width: 1810px) {
@@ -69,7 +158,7 @@ export const StyledSubReddit = styled.div`
     left: 0;
     width: 100%;
     height: 100%;
-    box-shadow: inset 0 0 5em 5em rgba(32, 32, 32, 0.8);
+    box-shadow: inset 0 0 10em 5em rgba(32, 32, 32, 0.65);
     pointer-events: none;
   }
 
@@ -96,18 +185,10 @@ export const StyledSubReddit = styled.div`
   }
 
   .onhover .bottom .fab.fa-reddit {
-    color: #ff5700;
+    color: ${({ theme }) => theme.palette.reddit};
     font-size: 2.5rem;
     pointer-events: all;
   }
-`;
-
-export const StyledContainer = styled.div`
-  height: 100vh;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 export const StyledPaginationContainer = styled.div`

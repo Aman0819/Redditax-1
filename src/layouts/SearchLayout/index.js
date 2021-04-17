@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 // Utilities
 import clsx from 'clsx';
@@ -16,7 +16,7 @@ import StyledHeader from './styles';
 import { useSearch } from 'src/contexts/SearchContext';
 
 // Actions
-import actions from 'src/actions/searchActions';
+import actions, { setCurrentSubreddit } from 'src/actions/searchActions';
 import { useHistory } from 'react-router';
 
 const Search = ({ children, className, ...props }) => {
@@ -24,8 +24,37 @@ const Search = ({ children, className, ...props }) => {
   const history = useHistory();
 
   const handleRedirect = () => {
-    history.push('subreddits/' + state.currentSubreddit);
+    localStorage.setItem('searchTerm', state.currentSubreddit);
+    history.push('/subreddits/' + state.currentSubreddit);
+
+    // Getting Previous Searches from LocalStorage
+    let previousSearches = localStorage.getItem('previousSearches');
+
+    previousSearches = !!previousSearches ? JSON.parse(previousSearches) : [];
+
+    // Checking if the list already includes current Search Term
+    if (previousSearches.includes(state.currentSubreddit)) return;
+
+    // Checking if there already exists a list or not
+    previousSearches = !previousSearches
+      ? [state.currentSubreddit]
+      : [...previousSearches, state.currentSubreddit];
+
+    // Checking if the list is larger than 6 items
+    previousSearches =
+      previousSearches.length > 6
+        ? previousSearches.slice(-6)
+        : previousSearches;
+
+    // Updating the list or creating one for previous search terms
+    localStorage.setItem('previousSearches', JSON.stringify(previousSearches));
   };
+
+  useEffect(() => {
+    const searchTerm = localStorage.getItem('searchTerm');
+    if (!searchTerm) return;
+    dispatch(setCurrentSubreddit(searchTerm));
+  }, [dispatch]);
 
   // Render JSX
   return (
