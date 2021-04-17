@@ -33,7 +33,12 @@ const Search = ({ children, className, ...props }) => {
     previousSearches = !!previousSearches ? JSON.parse(previousSearches) : [];
 
     // Checking if the list already includes current Search Term
-    if (previousSearches.includes(state.currentSubreddit)) return;
+    if (
+      previousSearches.find(
+        (prev) => prev.toLowerCase() === state.currentSubreddit.toLowerCase()
+      )
+    )
+      return;
 
     // Checking if there already exists a list or not
     previousSearches = !previousSearches
@@ -61,7 +66,7 @@ const Search = ({ children, className, ...props }) => {
     <StyledHeader className={clsx(className)} {...props}>
       <div className="search-container">
         <Logo />
-        <div className="search-box">
+        <form className="search-box" onSubmit={(e) => e.preventDefault()}>
           <span>r/</span>
           <input
             type="text"
@@ -77,7 +82,7 @@ const Search = ({ children, className, ...props }) => {
           <button onClick={handleRedirect} className="submit-btn">
             <SearchIcon />
           </button>
-        </div>
+        </form>
       </div>
       {children}
     </StyledHeader>

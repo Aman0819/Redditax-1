@@ -41,6 +41,7 @@ import {
   PreviousSearchesContainer
 } from './styles.js';
 import { Link } from 'react-router-dom';
+import Error from 'src/components/Error/index.js';
 
 // Proxies for API
 const URL = 'https://www.reddit.com/r/';
@@ -59,7 +60,7 @@ const SubReddits = () => {
 
         if (isMountedRef.current) {
           const previewableFiles = response?.data?.data?.children.filter(
-            (file) => file?.data?.preview?.enabled
+            (file) => file?.data?.preview
           );
           dispatch(setFiles(previewableFiles));
           dispatch(setAfter(response?.data?.data?.after));
@@ -110,7 +111,7 @@ const SubReddits = () => {
 
       if (isMountedRef.current) {
         const previewableFiles = response?.data?.data?.children.filter(
-          (file) => file?.data?.preview?.enabled
+          (file) => file?.data?.preview
         );
         dispatch(setFiles(previewableFiles));
         dispatch(setAfter(response?.data?.data?.after));
@@ -138,11 +139,12 @@ const SubReddits = () => {
   const renderPreviousSearches = () => {
     const previousSearches = localStorage.getItem('previousSearches');
     if (!previousSearches?.length) return;
+
     return (
       <PreviousSearchesContainer>
         Your Previous Searches:
         {JSON.parse(previousSearches).map((prev) => (
-          <Link to={'/subreddits/' + prev} className="search-term">
+          <Link key={prev} to={'/subreddits/' + prev} className="search-term">
             {prev}
           </Link>
         ))}
@@ -219,7 +221,11 @@ const SubReddits = () => {
       </React.Fragment>
     );
 
-  return <div className="image-grid__container">{renderImageGrid()}</div>;
+  return (
+    <div className="image-grid__container">
+      {state.retry ? <Error /> : renderImageGrid()}
+    </div>
+  );
 };
 
 export default SubReddits;
